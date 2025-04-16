@@ -206,7 +206,7 @@ public class GameController implements Initializable {
             executor.scheduleAtFixedRate(r, 0, 1, java.util.concurrent.TimeUnit.SECONDS);
         }
 
-        // Check for Enter key using the getText() method of KeyEvent
+        // Check for Enter key using the getText()
         if (ke.getText().equals("\r") || ke.getText().equals("\n")) { // Both \r and \n can represent Enter depending on platform
 
             String s = userWord.getText();
