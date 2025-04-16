@@ -55,6 +55,10 @@ public class Controller implements Initializable {
 
 
         // we need to display data
+        int[] data = FileHandling.sumUpNumbers("C:\\ProgrammingFinal\\TypeTestFinal\\src\\data\\");
+        total.setText(String.valueOf(data[0]));
+        wpm.setText(String.valueOf(Math.round(data[1]*1.0/data[3])));
+        invalid.setText(String.valueOf(data[2]));
     }
 
 
