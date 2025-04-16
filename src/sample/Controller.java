@@ -42,7 +42,7 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             String data = reader.nextLine();
-            displayUsername.setText("Welcome,"+data);
+            displayUsername.setText("Welcome, "+data);
 
         }
         // set the day

@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
+
+
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+
+
 
 public class GameController implements Initializable {
 
@@ -51,7 +55,6 @@ public class GameController implements Initializable {
 
     @FXML
     private Button playAgain;
-
 
 
     ArrayList<String> words = new ArrayList<>();
@@ -88,13 +91,13 @@ public class GameController implements Initializable {
         addToList();
         Collections.shuffle(words);
         programWord.setText(words.get(wordCounter));
-        secondProgramWord.setText(words.get(wordCounter+1));
+        secondProgramWord.setText(words.get(wordCounter + 1));
         wordCounter++;
 
 
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-        saveData = new File("src/data/"+formatter.format(date).strip()+".txt");
+        saveData = new File("C:\\ProgrammingFinal\\TypeTestFinal\\src\\data\\" + formatter.format(date).strip() + ".txt");
 
         try {
             if (saveData.createNewFile()) {
@@ -112,20 +115,15 @@ public class GameController implements Initializable {
     Runnable r = new Runnable() {
         @Override
         public void run() {
-            if (timer > -1) {
-                seconds.setText(String.valueOf(timer));
-                timer -= 1;
-            }
-
-            else {
+            if (timer <= -1) {
                 if (timer == -1) {
                     userWord.setDisable(true);
                     userWord.setText("Game over");
 
                     try {
                         FileWriter myWriter = new FileWriter(saveData);
-                        myWriter.write(countAll +";");
-                        myWriter.write(counter +";");
+                        myWriter.write(countAll + ";");
+                        myWriter.write(counter + ";");
                         myWriter.write(String.valueOf(countAll-counter));
                         myWriter.close();
                     } catch (IOException e) {
@@ -139,8 +137,10 @@ public class GameController implements Initializable {
                     executor.shutdown();
                 }
 
-                timer -= 1;
+            } else {
+                seconds.setText(String.valueOf(timer));
             }
+            timer -= 1;
         }
     };
 
@@ -197,40 +197,44 @@ public class GameController implements Initializable {
 
     private int countAll = 0;
     private int counter = 0;
+
     public void startGame(KeyEvent ke) {
         // only gets called once
         if (first == 1) {
             first = 0;
-            executor.scheduleAtFixedRate(r, 0, 1, TimeUnit.SECONDS);
+            // Removed the Object TimeUnit; and fixed scheduling part
+            executor.scheduleAtFixedRate(r, 0, 1, java.util.concurrent.TimeUnit.SECONDS);
         }
 
-        if (ke.getCode().equals(KeyCode.ENTER)) {
+        // Check for Enter key using the getText() method of KeyEvent
+        if (ke.getText().equals("\r") || ke.getText().equals("\n")) { // Both \r and \n can represent Enter depending on platform
 
             String s = userWord.getText();
             String real = programWord.getText();
             countAll++;
 
-            // if correct
+            // If correct
             if (s.equals(real)) {
                 counter++;
                 wordsPerMin.setText(String.valueOf(counter));
 
                 Thread t = new Thread(fadeCorrect);
                 t.start();
-
-            }
-            else {
+            } else {
                 Thread t = new Thread(fadeWrong);
                 t.start();
             }
             userWord.setText("");
-            accuracy.setText(String.valueOf(Math.round((counter*1.0/countAll)*100)));
+            accuracy.setText(String.valueOf(Math.round((counter * 1.0 / countAll) * 100)));
             programWord.setText(words.get(wordCounter));
-            secondProgramWord.setText(words.get(wordCounter+1));
+
+            if (wordCounter + 1 < words.size()) { // To avoid index out of bounds
+                secondProgramWord.setText(words.get(wordCounter + 1));
+            } else {
+                secondProgramWord.setText("");
+            }
+
             wordCounter++;
         }
-
-
-
     }
 }
