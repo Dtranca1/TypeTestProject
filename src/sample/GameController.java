@@ -84,7 +84,7 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // calls for addToList and shuffles words and sets first word and second word while shuffling
         playAgain.setVisible(false);
         playAgain.setDisable(true);
         seconds.setText("60");
@@ -94,7 +94,7 @@ public class GameController implements Initializable {
         secondProgramWord.setText(words.get(wordCounter + 1));
         wordCounter++;
 
-
+        // creates file and saves data to data folder
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
         saveData = new File("C:\\ProgrammingFinal\\TypeTestFinal\\src\\data\\" + formatter.format(date).strip() + ".txt");
@@ -113,13 +113,14 @@ public class GameController implements Initializable {
 
     private int timer = 60;
     Runnable r = new Runnable() {
+        // runnable object r
         @Override
         public void run() {
             if (timer <= -1) {
                 if (timer == -1) {
                     userWord.setDisable(true);
                     userWord.setText("Game over");
-
+                    // writes data to data file
                     try {
                         FileWriter myWriter = new FileWriter(saveData);
                         myWriter.write(countAll + ";");
@@ -130,7 +131,7 @@ public class GameController implements Initializable {
                         e.printStackTrace();
                     }
                 }
-
+                    // play again button timer
                 if (timer == -4) {
                     playAgain.setVisible(true);
                     playAgain.setDisable(false);
@@ -145,6 +146,7 @@ public class GameController implements Initializable {
     };
 
     Runnable fadeCorrect = new Runnable() {
+        // shows if word is correct
         @Override
         public void run() {
             correct.setOpacity(0);
@@ -171,6 +173,7 @@ public class GameController implements Initializable {
     };
 
     Runnable fadeWrong = new Runnable() {
+        // shows if word is wrong
         @Override
         public void run() {
             wrong.setOpacity(0);
@@ -202,12 +205,12 @@ public class GameController implements Initializable {
         // only gets called once
         if (first == 1) {
             first = 0;
-            // Removed the Object TimeUnit; and fixed scheduling part
             executor.scheduleAtFixedRate(r, 0, 1, java.util.concurrent.TimeUnit.SECONDS);
         }
 
         // Check for Enter key using the getText()
-        if (ke.getText().equals("\r") || ke.getText().equals("\n")) { // Both \r and \n can represent Enter depending on platform
+        if (ke.getText().equals("\r") || ke.getText().equals("\n")) {
+            // Both \r and \n can represent Enter depending on platform
 
             String s = userWord.getText();
             String real = programWord.getText();
@@ -225,7 +228,7 @@ public class GameController implements Initializable {
                 t.start();
             }
             userWord.setText("");
-            accuracy.setText(String.valueOf(Math.round((counter * 1.0 / countAll) * 100)));
+            accuracy.setText(String.valueOf(Math.round((counter * 1.0 / countAll) * 100))); // calculates accuracy
             programWord.setText(words.get(wordCounter));
 
             if (wordCounter + 1 < words.size()) { // To avoid index out of bounds

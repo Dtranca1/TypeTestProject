@@ -54,7 +54,7 @@ public class Controller implements Initializable {
         timeLabel.setText("Today is " + strDay);
 
 
-        // we need to display data
+        // displays data on front screen
         int[] data = FileHandling.sumUpNumbers("C:\\ProgrammingFinal\\TypeTestFinal\\src\\data\\");
         total.setText(String.valueOf(data[0]));
         wpm.setText(String.valueOf(Math.round(data[1]*1.0/data[3])));
