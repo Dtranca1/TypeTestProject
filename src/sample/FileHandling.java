@@ -26,6 +26,7 @@ public class FileHandling {
     }
 
     public static int[] sumUpNumbers(String directoryFilePath) {
+        // sums up all files
         File directory = new File(directoryFilePath);
         File[] files = directory.listFiles(File::isFile);
         int[] returnArray = new int[4];
